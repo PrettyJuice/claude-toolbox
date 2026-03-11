@@ -44,26 +44,7 @@ claude-toolbox/
 
 ## Available tools
 
-### extract-frames.sh
-
-Extract JPG frames from a video using ffmpeg.
-
-```bash
-# Interactive mode
-extract-frames.sh
-
-# Direct mode
-extract-frames.sh video.mp4 00:01:30 00:02:00 5
-```
-
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `video` | Path to the video file | `video.mp4` |
-| `start` | Start timestamp | `00:01:30` |
-| `end` | End timestamp | `00:02:00` |
-| `fps` | Frames per second to extract | `5` |
-
-> Supports Windows paths under WSL (`C:\Users\...` is automatically converted to `/mnt/c/Users/...`).
+See [`claude-instructions.md`](claude-instructions.md) for the full list of tools and their documentation.
 
 ## Adding a new tool
 
