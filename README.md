@@ -1,122 +1,129 @@
-# Erwin's Toolbox
+# Claude Toolbox
 
-Boîte à outils personnelle pour [Claude Code](https://claude.com/claude-code).
-Clone le repo, lance `install.sh`, et tous les outils sont disponibles depuis n'importe quel projet.
+A collection of CLI tools designed to work with [Claude Code](https://claude.com/claude-code).
+
+Clone the repo, run `install.sh`, and all tools become available globally — across every project on your machine.
+
+## How it works
+
+The installer does two things:
+
+1. **Symlinks** each script from `scripts/` into `~/.local/bin/` — making them callable from anywhere
+2. **Injects** tool documentation into `~/.claude/CLAUDE.md` — so Claude Code knows when and how to use each tool, in any project
+
+This means you can say *"extract frames from this video"* in any conversation, and Claude will automatically use the right script.
 
 ## Installation
 
 ```bash
-git clone <repo-url> ~/projects/toolbox
-cd ~/projects/toolbox
+git clone git@github.com:PrettyJuice/claude-toolbox.git
+cd claude-toolbox
 ./install.sh
 ```
 
-L'installateur :
-- Crée des symlinks de chaque script vers `~/.local/bin/` (accessible partout)
-- Injecte les instructions dans `~/.claude/CLAUDE.md` (Claude connaît les outils dans tous les projets)
+To update after a `git pull`, just re-run `./install.sh` — it's idempotent.
 
-Pour mettre à jour après un `git pull`, relance simplement `./install.sh` — il est idempotent.
-
-## Désinstallation
+## Uninstall
 
 ```bash
 ./uninstall.sh
 ```
 
-## Structure
+## Project structure
 
 ```
-toolbox/
-├── scripts/                  # Scripts CLI exécutables
+claude-toolbox/
+├── scripts/                  # CLI scripts (the actual tools)
 │   └── extract-frames.sh
-├── commands/                 # (optionnel) Slash commands Claude (/nom)
-├── claude-instructions.md    # Instructions injectées dans ~/.claude/CLAUDE.md
+├── commands/                 # (optional) Claude Code slash commands
+├── claude-instructions.md    # Tool docs injected into ~/.claude/CLAUDE.md
 ├── install.sh
 ├── uninstall.sh
 └── README.md
 ```
 
-## Outils disponibles
+## Available tools
 
 ### extract-frames.sh
 
-Extrait des images JPG d'une vidéo avec ffmpeg.
+Extract JPG frames from a video using ffmpeg.
 
 ```bash
-# Mode interactif
+# Interactive mode
 extract-frames.sh
 
-# Mode direct
+# Direct mode
 extract-frames.sh video.mp4 00:01:30 00:02:00 5
 ```
 
-| Paramètre | Description | Exemple |
+| Parameter | Description | Example |
 |-----------|-------------|---------|
-| `video` | Chemin du fichier vidéo (Windows ou Linux) | `video.mp4` |
-| `start` | Temps de début | `00:01:30` |
-| `end` | Temps de fin | `00:02:00` |
-| `fps` | Images par seconde | `5` |
+| `video` | Path to the video file | `video.mp4` |
+| `start` | Start timestamp | `00:01:30` |
+| `end` | End timestamp | `00:02:00` |
+| `fps` | Frames per second to extract | `5` |
 
-> Supporte les chemins Windows sous WSL (`C:\Users\...` → `/mnt/c/Users/...`).
+> Supports Windows paths under WSL (`C:\Users\...` is automatically converted to `/mnt/c/Users/...`).
 
----
+## Adding a new tool
 
-## Ajouter un nouvel outil
+### 1. Create the script
 
-### 1. Ajouter un script
-
-Crée ton script dans `scripts/` :
+Add your script to `scripts/`:
 
 ```bash
-# scripts/mon-script.sh
 #!/usr/bin/env bash
 set -euo pipefail
-# ...
+# your code here
 ```
 
-Rends-le exécutable :
+Make it executable:
 
 ```bash
-chmod +x scripts/mon-script.sh
+chmod +x scripts/my-script.sh
 ```
 
-### 2. Documenter pour Claude
+### 2. Document it for Claude
 
-Ajoute une section dans `claude-instructions.md` en suivant ce format :
+Add a section in `claude-instructions.md` following this template:
 
 ```markdown
-### mon-script — Description courte
+### my-script — Short description
 
-**Quand l'utiliser :** Décris les situations où Claude doit utiliser cet outil.
+**When to use:** Describe the situations where Claude should use this tool.
 
-**Commande :**
+**Command:**
 \```bash
-mon-script.sh <arg1> <arg2>
+my-script.sh <arg1> <arg2>
 \```
 
-**Paramètres :**
+**Parameters:**
 - `arg1` : description
 - `arg2` : description
 ```
 
-### 3. Installer
+### 3. Install
 
 ```bash
 ./install.sh
 ```
 
-### 4. (Optionnel) Ajouter une slash command
+### 4. (Optional) Add a slash command
 
-Si tu veux un raccourci `/mon-script` dans Claude Code, crée `commands/mon-script.md` :
+To create a `/my-script` shortcut in Claude Code, add a `commands/my-script.md` file:
 
 ```markdown
-Exécute mon-script.sh avec les arguments suivants : $ARGUMENTS
+Run my-script.sh with the following arguments: $ARGUMENTS
 ```
 
-Puis copie-le manuellement dans `~/.claude/commands/` (ou ajoute la logique dans `install.sh`).
+Then copy it to `~/.claude/commands/` or extend `install.sh` to handle it.
 
-## Prérequis
+## Prerequisites
 
 - [Claude Code](https://claude.com/claude-code)
 - bash
-- Dépendances par script (ex: `ffmpeg` pour extract-frames)
+- Per-script dependencies (e.g. `ffmpeg` for extract-frames)
+
+## License
+
+MIT
