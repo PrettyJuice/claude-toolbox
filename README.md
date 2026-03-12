@@ -35,6 +35,7 @@ To update after a `git pull`, just re-run `./install.sh` — it's idempotent.
 claude-toolbox/
 ├── scripts/                  # CLI scripts (the actual tools)
 │   └── extract-frames.sh
+├── skills/                   # (optional) Claude Code skills
 ├── commands/                 # (optional) Claude Code slash commands
 ├── claude-instructions.md    # Tool docs injected into ~/.claude/CLAUDE.md
 ├── install.sh
@@ -42,31 +43,29 @@ claude-toolbox/
 └── README.md
 ```
 
+The toolbox supports three types of extensions:
+
+| Type | Directory | Installed to | Purpose |
+|------|-----------|--------------|---------|
+| **Scripts** | `scripts/` | `~/.local/bin/` | CLI tools that do the actual work (bash, python, etc.) |
+| **Skills** | `skills/` | `~/.claude/skills/` | Markdown files that teach Claude complex workflows — triggered automatically based on context |
+| **Commands** | `commands/` | `~/.claude/commands/` | Slash commands (`/my-command`) — shortcuts you invoke manually in a conversation |
+
 ## Available tools
 
 See [`claude-instructions.md`](claude-instructions.md) for the full list of tools and their documentation.
 
 ## Adding a new tool
 
-### 1. Create the script
+### Adding a script
 
-Add your script to `scripts/`:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-# your code here
-```
-
-Make it executable:
+1. Create your script in `scripts/` and make it executable:
 
 ```bash
 chmod +x scripts/my-script.sh
 ```
 
-### 2. Document it for Claude
-
-Add a section in `claude-instructions.md` following this template:
+2. Document it in `claude-instructions.md` so Claude knows when and how to use it:
 
 ```markdown
 ### my-script — Short description
@@ -83,21 +82,31 @@ my-script.sh <arg1> <arg2>
 - `arg2` : description
 ```
 
-### 3. Install
+3. Run `./install.sh`
 
-```bash
-./install.sh
-```
+### Adding a skill
 
-### 4. (Optional) Add a slash command
-
-To create a `/my-script` shortcut in Claude Code, add a `commands/my-script.md` file:
+Create a markdown file in `skills/`. Skills are instructions that Claude picks up automatically based on context.
 
 ```markdown
-Run my-script.sh with the following arguments: $ARGUMENTS
+# skills/video-analysis.md
+Analyze video content by extracting frames with extract-frames.sh,
+then describe each frame in detail...
 ```
 
-Then copy it to `~/.claude/commands/` or extend `install.sh` to handle it.
+Run `./install.sh` to symlink it into `~/.claude/skills/`.
+
+### Adding a command
+
+Create a markdown file in `commands/`. Commands are invoked manually with `/command-name` in a conversation.
+
+```markdown
+# commands/extract-frames.md
+Extract frames from the video $ARGUMENTS using extract-frames.sh.
+Use 5 fps by default if not specified.
+```
+
+Run `./install.sh` to symlink it into `~/.claude/commands/`.
 
 ## Prerequisites
 
