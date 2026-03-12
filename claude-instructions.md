@@ -1,6 +1,6 @@
-# Erwin's Toolbox
+# Claude Toolbox
 
-Outils personnels installés via https://github.com/erwin/toolbox.
+Outils personnels installés via https://github.com/PrettyJuice/claude-toolbox.
 Les scripts sont disponibles dans le PATH (~/.local/bin/).
 
 ## Outils disponibles
