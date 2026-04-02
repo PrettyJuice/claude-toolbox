@@ -51,7 +51,31 @@ if [[ -d "$TOOLBOX_DIR/commands" ]]; then
     done
 fi
 
-# 4. Remove toolbox section from ~/.claude/CLAUDE.md
+# 4. Remove statusline
+STATUSLINE_TARGET="$CLAUDE_DIR/statusline.sh"
+if [[ -L "$STATUSLINE_TARGET" ]] && [[ "$(readlink "$STATUSLINE_TARGET")" == "$TOOLBOX_DIR/statusline/statusline.sh" ]]; then
+    rm "$STATUSLINE_TARGET"
+    echo "  Statusline supprimee: $STATUSLINE_TARGET"
+
+    # Remove statusLine config from settings.json
+    SETTINGS="$CLAUDE_DIR/settings.json"
+    if [[ -f "$SETTINGS" ]]; then
+        python3 -c "
+import json
+path = '$SETTINGS'
+with open(path) as f:
+    data = json.load(f)
+if 'statusLine' in data:
+    del data['statusLine']
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+        f.write('\n')
+    print('  Statusline config retiree de settings.json')
+"
+    fi
+fi
+
+# 5. Remove toolbox section from ~/.claude/CLAUDE.md
 if [[ -f "$CLAUDE_MD" ]] && grep -q "$MARKER_START" "$CLAUDE_MD"; then
     sed -i "/$MARKER_START/,/$MARKER_END/d" "$CLAUDE_MD"
     sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' "$CLAUDE_MD"

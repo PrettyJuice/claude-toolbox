@@ -58,7 +58,39 @@ if [[ -d "$TOOLBOX_DIR/commands" ]]; then
     done
 fi
 
-# 4. Inject instructions into ~/.claude/CLAUDE.md
+# 4. Install statusline
+if [[ -f "$TOOLBOX_DIR/statusline/statusline.sh" ]]; then
+    target="$CLAUDE_DIR/statusline.sh"
+    if [[ -L "$target" || -f "$target" ]]; then
+        rm "$target"
+    fi
+    ln -s "$TOOLBOX_DIR/statusline/statusline.sh" "$target"
+    echo "  Statusline: statusline.sh -> $target"
+
+    # Inject statusLine config into settings.json via Python (no jq dependency)
+    SETTINGS="$CLAUDE_DIR/settings.json"
+    python3 -c "
+import json, os
+path = '$SETTINGS'
+data = {}
+if os.path.isfile(path):
+    with open(path) as f:
+        data = json.load(f)
+if 'statusLine' not in data:
+    data['statusLine'] = {
+        'type': 'command',
+        'command': '~/.claude/statusline.sh'
+    }
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+        f.write('\n')
+    print('  Statusline config ajoutee a settings.json')
+else:
+    print('  Statusline config deja presente dans settings.json')
+"
+fi
+
+# 5. Inject instructions into ~/.claude/CLAUDE.md
 mkdir -p "$CLAUDE_DIR"
 
 if [[ -f "$CLAUDE_MD" ]]; then

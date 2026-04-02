@@ -35,6 +35,8 @@ To update after a `git pull`, just re-run `./install.sh` — it's idempotent.
 claude-toolbox/
 ├── scripts/                  # CLI scripts (the actual tools)
 │   └── extract-frames.sh
+├── statusline/               # Claude Code statusline script
+│   └── statusline.sh
 ├── skills/                   # (optional) Claude Code skills
 ├── commands/                 # (optional) Claude Code slash commands
 ├── claude-instructions.md    # Tool docs injected into ~/.claude/CLAUDE.md
@@ -43,11 +45,12 @@ claude-toolbox/
 └── README.md
 ```
 
-The toolbox supports three types of extensions:
+The toolbox supports four types of extensions:
 
 | Type | Directory | Installed to | Purpose |
 |------|-----------|--------------|---------|
 | **Scripts** | `scripts/` | `~/.local/bin/` | CLI tools that do the actual work (bash, python, etc.) |
+| **Statusline** | `statusline/` | `~/.claude/statusline.sh` | Custom statusline showing rate limits with progress bars |
 | **Skills** | `skills/` | `~/.claude/skills/` | Markdown files that teach Claude complex workflows — triggered automatically based on context |
 | **Commands** | `commands/` | `~/.claude/commands/` | Slash commands (`/my-command`) — shortcuts you invoke manually in a conversation |
 
@@ -108,10 +111,26 @@ Use 5 fps by default if not specified.
 
 Run `./install.sh` to symlink it into `~/.claude/commands/`.
 
+## Statusline
+
+The statusline displays your Claude Code rate limits at a glance:
+
+```
+[Opus 4.6] 5h ████▓▓▓░░░ 42% ⏱ 1h29 │ 7d ██▓▓▓░░░░░ 23% ⏱ 2j23h
+```
+
+- **Green `█`** — quota consumed
+- **Red `█`** — overconsumption (quota exceeds elapsed time — slow down!)
+- **Gray `▓`** — elapsed time in the window beyond your consumption
+- **Empty `░`** — time remaining before reset
+
+Installed automatically by `install.sh` (symlink + `settings.json` config). Requires Python 3.
+
 ## Prerequisites
 
 - [Claude Code](https://claude.com/claude-code)
 - bash
+- Python 3 (for the statusline)
 - Per-script dependencies (e.g. `ffmpeg` for extract-frames)
 
 ## License

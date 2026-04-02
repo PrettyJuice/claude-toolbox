@@ -27,3 +27,18 @@ extract-frames.sh video.mp4 00:01:30 00:02:00 5
 ```
 
 Les images sont générées dans un dossier `frames_<nom>_<debut>-<fin>_<fps>fps/`.
+
+### statusline — Barre de statut avec quotas Claude Code
+
+**Quand l'utiliser :** Installé automatiquement par le toolbox. Affiche en permanence dans la
+statusline de Claude Code les quotas 5h et 7d avec barres de progression visuelles.
+
+**Fonctionnement :**
+- Barre verte : quota consommé
+- Barre rouge : surconsommation (quota > temps écoulé)
+- Barre grise : temps écoulé dans la fenêtre
+- Barre vide : temps restant
+
+**Pré-requis :** Python 3
+
+**Configuration :** Automatique via `install.sh` (symlink + injection dans settings.json).
