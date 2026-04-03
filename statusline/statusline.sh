@@ -80,10 +80,10 @@ def make_bar(pct, resets_at, window, width=10):
 bar_5h, pct_5h, left_5h, col_5h = make_bar(quota_5h, resets_5h, 18000)
 
 # ─── Assemblage ───
-line = f"[{model}] 5h {bar_5h} \033[{col_5h}m{pct_5h}%\033[0m \033[90m⏱ {left_5h}\033[0m"
+line = f"[{model}] 5h {bar_5h} \033[{col_5h}m{pct_5h}%\033[0m \033[90m⏱  {left_5h}\033[0m"
 
 if quota_7d is not None:
     bar_7d, pct_7d, left_7d, col_7d = make_bar(quota_7d, resets_7d, 604800, width=10)
-    line += f" \033[90m│\033[0m 7d {bar_7d} \033[{col_7d}m{pct_7d}%\033[0m \033[90m⏱ {left_7d}\033[0m"
+    line += f" \033[90m│\033[0m 7d {bar_7d} \033[{col_7d}m{pct_7d}%\033[0m \033[90m⏱  {left_7d}\033[0m"
 
 print(line)
