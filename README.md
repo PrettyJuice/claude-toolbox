@@ -113,6 +113,15 @@ Run `./install.sh` to symlink it into `~/.claude/commands/`.
 
 ## Statusline
 
+If you only want the statusline without the rest of the toolbox:
+
+```bash
+git clone git@github.com:PrettyJuice/claude-toolbox.git
+cd claude-toolbox/statusline
+./install.sh    # install
+./uninstall.sh  # uninstall
+```
+
 The statusline displays your Claude Code rate limits at a glance:
 
 ```
