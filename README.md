@@ -124,14 +124,12 @@ cd claude-toolbox/statusline
 
 The statusline displays your Claude Code rate limits at a glance:
 
-```
-[Opus 4.6] 5h ████▓▓▓░░░ 42% ⏱ 1h29 │ 7d ██▓▓▓░░░░░ 23% ⏱ 2j23h
-```
+`[Opus 4.6] 5h` 🟩🟩🟩🟩⬛⬛⬛⬜⬜⬜ `42% ⏱  1h29 │ 7d` 🟩🟩⬛⬛⬛⬜⬜⬜⬜⬜ `23% ⏱  2j23h`
 
-- **Green `█`** — quota consumed
-- **Red `█`** — overconsumption (quota exceeds elapsed time — slow down!)
-- **Gray `▓`** — elapsed time in the window beyond your consumption
-- **Empty `░`** — time remaining before reset
+- 🟩 quota consumed
+- 🟥 overconsumption (quota exceeds elapsed time — slow down!)
+- ⬛ elapsed time in the window beyond your consumption
+- ⬜ time remaining before reset
 
 Installed automatically by `install.sh` (symlink + `settings.json` config). Requires Python 3.
 
